@@ -376,6 +376,20 @@ function initExpControls() {
         scrollExpToNav(expIdFromHash(), false);
       }
     });
+    // Lazy photos and the open-row height animation keep growing rows above the target for a
+    // moment after load, so keep the linked role pinned under the nav until the layout settles
+    const list = document.getElementById('exp-list');
+    if (list && 'ResizeObserver' in window) {
+      const started = Date.now();
+      const ro = new ResizeObserver(() => {
+        if (userScrolled || Date.now() - started > 4000 || !expIdFromHash()) {
+          ro.disconnect();
+          return;
+        }
+        scrollExpToNav(expIdFromHash(), false);
+      });
+      ro.observe(list);
+    }
   }
   window.addEventListener('hashchange', () => openExpFromHash(true));
 }
