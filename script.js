@@ -498,6 +498,14 @@ renderExperiences();
 renderGallery('documentary-photos', documentaryPhotos);
 renderSkillsPhotos();
 
+// Page counts shown in the PDF pills, keyed by href.
+// UPDATE the count here whenever you replace a PDF with a different length.
+const PDF_PAGES = {
+  'docs/resume.pdf': 1,
+  'docs/writing-sample.pdf': 11,
+  'docs/ames-brief.pdf': 25
+};
+
 // Add link icons and pills
 document.addEventListener('DOMContentLoaded', () => {
   // Add sr-only text for external links
@@ -510,12 +518,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
-  // Add PDF pills
+  // Add PDF pills, with page counts where known
   document.querySelectorAll('a[href$=".pdf"]').forEach(a => {
     if (!a.querySelector('.pill')) {
       const pill = document.createElement('span');
       pill.className = 'pill';
-      pill.textContent = 'PDF';
+      const pages = PDF_PAGES[a.getAttribute('href')];
+      pill.textContent = pages ? `PDF \u00b7 ${pages} ${pages === 1 ? 'p' : 'pp'}` : 'PDF';
       a.appendChild(pill);
     }
   });

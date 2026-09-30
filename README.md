@@ -82,6 +82,7 @@ In the **`docs/`** folder on GitHub:
 1. Click the PDF you want to replace
 2. Click the **trash icon** (or upload a file with the same name)
 3. Commit the change
+4. If the new PDF has a different number of pages, update the `PDF_PAGES` lookup near the top of the "Add link icons and pills" section in `script.js` (for example `'docs/resume.pdf': 1`). The page count shown in each PDF pill ("PDF · 1 p") comes from that lookup; PDFs not listed there just show "PDF".
 
 ## For Developers
 
