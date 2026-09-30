@@ -37,7 +37,8 @@ To enable GitHub Pages:
 
 **`index.html`** — Everything else:
 - Education section (schools, dates, involvement)
-- "Skills & Interests" list
+- "Skills, Interests, and Projects" section (skills and interests lists, plus projects)
+- Projects are the `<article class="project">` blocks in the "Skills, Interests, and Projects" section; copy one to add another.
 
 **PDF files in `docs/`** — Upload new PDFs with the same name to replace them.
 
