@@ -29,7 +29,6 @@ function buildGallery(photos, galleryId) {
         galleryId: galleryId
       };
       openLightboxPhoto(idx);
-      btn.focus();
     });
 
     const container = document.createElement('div');
@@ -118,11 +117,15 @@ function renderExperiences() {
       const badge = document.createElement('div');
       badge.className = 'exp-badge';
       
-      const svg = document.createElement('svg');
+      const SVG_NS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(SVG_NS, 'svg');
       svg.setAttribute('viewBox', '0 0 24 24');
       svg.setAttribute('fill', 'currentColor');
       svg.setAttribute('aria-hidden', 'true');
-      svg.innerHTML = '<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>';
+      svg.setAttribute('focusable', 'false');
+      const path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('d', 'M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z');
+      svg.appendChild(path);
       badge.appendChild(svg);
       
       const text = document.createElement('span');
@@ -434,6 +437,14 @@ function trapFocus(e) {
 
 function openDialog(dialogEl, opener) {
   const id = dialogEl.id;
+
+  // Already open (e.g. stepping through lightbox photos): keep the original opener and stack entry
+  if (dialogEl.classList.contains('open') && focusTraps.has(id)) {
+    const closeBtn = dialogEl.querySelector('.mclose');
+    if (closeBtn && !dialogEl.contains(document.activeElement)) closeBtn.focus();
+    return;
+  }
+
   const prevFocus = document.activeElement;
 
   dialogEl.classList.add('open');
@@ -442,11 +453,9 @@ function openDialog(dialogEl, opener) {
   dialogStack.push(id);
   focusTraps.set(id, { opener: opener || prevFocus });
 
-  // Focus close button
+  // Focus the close button right away (the overlay turns visible as soon as .open is added)
   const closeBtn = dialogEl.querySelector('.mclose');
-  if (closeBtn) {
-    setTimeout(() => closeBtn.focus(), 50);
-  }
+  if (closeBtn) closeBtn.focus();
 }
 
 function closeDialog(dialogEl) {
@@ -459,13 +468,10 @@ function closeDialog(dialogEl) {
   dialogStack = dialogStack.filter(d => d !== id);
   focusTraps.delete(id);
 
-  // Restore focus to opener
-  if (focusTrap && focusTrap.opener) {
-    setTimeout(() => {
-      if (focusTrap.opener && focusTrap.opener.focus) {
-        focusTrap.opener.focus();
-      }
-    }, 0);
+  // Restore focus to the opener synchronously, whether or not the close button ever took focus
+  const opener = focusTrap && focusTrap.opener;
+  if (opener && opener.isConnected && typeof opener.focus === 'function') {
+    opener.focus();
   }
 }
 
