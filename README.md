@@ -104,3 +104,9 @@ Then open http://localhost:8000 in your browser.
 - `script.js` — Vanilla JavaScript (no dependencies)
 - `images/` — Photos for galleries
 - `docs/` — PDFs (resume, briefs, writing samples)
+
+## Search and sharing
+
+- The link preview (iMessage, LinkedIn, Slack, etc.) uses `images/og-card.png` (1200x630). Regenerate it if the headshot changes.
+- `robots.txt` and `sitemap.xml` live in the repo root.
+- After the domain is live, verify it in Google Search Console and submit the sitemap (`https://joshuasamuel.org/sitemap.xml`).
