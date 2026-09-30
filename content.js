@@ -89,7 +89,7 @@ const experiences = [
   },
   {
     id: 'rij',
-    title: 'Rhode Island Center For Justice',
+    title: 'Rhode Island Center for Justice',
     role: 'Housing Advocate',
     loc: 'Providence, RI',
     dates: 'Sep 2023 – May 2024',

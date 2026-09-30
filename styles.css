@@ -715,6 +715,13 @@ section[id],#main{scroll-margin-top:var(--nav-h)}
 }
 /* Safety net: the nav links can scroll sideways rather than widen the page */
 @media(max-width:360px){
+  nav .inner{padding-left:8px;padding-right:8px}
   nav .navlinks{min-width:0;overflow-x:auto;scrollbar-width:none}
   nav .navlinks::-webkit-scrollbar{display:none}
+}
+
+/* Very small phones: the four section links need the whole bar, and the hero already opens with the name */
+@media(max-width:340px){
+  nav .brand{display:none}
+  nav .inner{justify-content:center}
 }
