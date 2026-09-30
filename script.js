@@ -81,6 +81,9 @@ function openLightboxPhoto(idx) {
   if (counter) counter.style.display = context.photos.length > 1 ? '' : 'none';
   if (prevBtn) prevBtn.style.display = context.photos.length > 1 ? '' : 'none';
   if (nextBtn) nextBtn.style.display = context.photos.length > 1 ? '' : 'none';
+  const total = context.photos.length;
+  if (prevBtn) prevBtn.setAttribute('aria-label', `Previous photo (${(idx - 1 + total) % total + 1} of ${total})`);
+  if (nextBtn) nextBtn.setAttribute('aria-label', `Next photo (${(idx + 1) % total + 1} of ${total})`);
   
   context.currentIndex = idx;
   openDialog(lightbox, document.querySelector(`[data-gallery-id="${context.galleryId}"] [data-photo-idx="${idx}"]`));
@@ -147,8 +150,6 @@ function renderExperiences() {
     const expBody = document.createElement('div');
     expBody.className = expIdx === 0 ? 'exp-body open' : 'exp-body';
     expBody.id = `body-${exp.id}`;
-    expBody.setAttribute('role', 'region');
-    expBody.setAttribute('aria-labelledby', `exp-title-${exp.id}`);
     if (expIdx === 0) {
       expBody.style.maxHeight = 'auto';
     } else {
@@ -170,7 +171,7 @@ function renderExperiences() {
       expBody.appendChild(modifiedBuildGallery);
     }
 
-    expBody.appendChild(buildCopyLink(exp.id));
+    expBody.appendChild(buildCopyLink(exp.id, exp.title));
     if (expIdx !== 0) expBody.inert = true; // closed rows keep their controls out of the tab order
 
     expBar.addEventListener('click', () => toggleExp(exp.id));
@@ -235,7 +236,7 @@ function syncToggleAll() {
   const all = allExpOpen();
   btn.classList.toggle('is-open', all);
   const label = btn.querySelector('.exp-toggle-label');
-  if (label) label.textContent = all ? 'Hide all roles' : 'Show all roles';
+  if (label) label.textContent = all ? 'Collapse all' : 'Expand all';
 }
 
 // On narrow screens, bring a just-opened row's header under the sticky nav if it would be cut off
@@ -275,14 +276,15 @@ function openExpFromHash(smooth) {
   return true;
 }
 
-function buildCopyLink(id) {
+function buildCopyLink(id, title) {
   const wrap = document.createElement('div');
   wrap.className = 'exp-copy-row';
 
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'exp-copy';
-  btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg><span class="exp-copy-label">Copy link to this role</span>';
+  btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg><span class="exp-copy-label">Copy link</span>';
+  btn.setAttribute('aria-label', `Copy link to the ${title} role`);
 
   const live = document.createElement('span');
   live.className = 'sr-only';
@@ -300,12 +302,12 @@ function buildCopyLink(id) {
       }
     } catch (e) { /* fall through to the fallback */ }
     if (!ok) ok = copyTextFallback(url, wrap);
-    const msg = ok ? 'Link copied' : 'Could not copy link';
+    const msg = ok ? 'Link copied' : "Couldn't copy \u2014 use the address bar";
     label.textContent = msg;
     live.textContent = msg;
     clearTimeout(timer);
     timer = setTimeout(() => {
-      label.textContent = 'Copy link to this role';
+      label.textContent = 'Copy link';
       live.textContent = '';
     }, 2000);
   });
@@ -634,7 +636,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const pill = document.createElement('span');
       pill.className = 'pill';
       const pages = PDF_PAGES[a.getAttribute('href')];
-      pill.textContent = pages ? `PDF \u00b7 ${pages} ${pages === 1 ? 'p' : 'pp'}` : 'PDF';
+      pill.textContent = pages ? `PDF \u00b7 ${pages} ${pages === 1 ? 'page' : 'pages'}` : 'PDF';
       a.appendChild(pill);
     }
   });
