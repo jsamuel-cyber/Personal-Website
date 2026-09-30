@@ -1,6 +1,7 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
 :root{
+  --nav-h:64px;
   --crimson:#9e1b32;
   --crimson-deep:#7d1427;
   --crimson-bright:#b8283f;
@@ -203,8 +204,6 @@ footer .finner{max-width:1040px;margin:0 auto;display:flex;justify-content:space
 footer a{color:var(--ink-soft);transition:color 0.2s}
 footer a:hover{color:var(--crimson)}
 footer a:focus-visible{outline:2px solid var(--crimson);outline-offset:2px}
-.back-top{cursor:pointer;display:inline-flex;align-items:center;gap:6px;color:var(--ink-soft)}
-.back-top:hover{color:var(--crimson);text-decoration:none}
 
 /* MODALS */
 .overlay{position:fixed;inset:0;z-index:70;background:rgba(33,29,26,0.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:opacity 0.25s,visibility 0.25s}
@@ -253,7 +252,6 @@ footer a:focus-visible{outline:2px solid var(--crimson);outline-offset:2px}
 /* PDF pill badge */
 .pill {
   font-size: 0.62rem;
-  text-transform: uppercase;
   border: 1px solid var(--crimson);
   padding: 2px 6px;
   border-radius: 3px;
@@ -715,13 +713,38 @@ main { counter-reset: sec; }
 @media(max-width:720px){
   .sec-head h2{white-space:normal;line-height:1.15}
 }
+
+/* Scroll offset so nav jumps do not hide headings under the sticky bar */
+section[id],#main{scroll-margin-top:var(--nav-h)}
+@media(max-width:719px){
+  :root{--nav-h:57px}
+  nav .inner{padding:6px 16px}
+  nav .navlinks{gap:0}
+  nav .navlinks a{display:inline-flex;align-items:center;min-height:44px;padding:0 7px}
+  nav .navlinks a::after{left:7px;right:7px;bottom:9px;width:auto;transform:scaleX(0);transform-origin:left;transition:transform 0.25s}
+  nav .navlinks a:hover::after,nav .navlinks a.active::after{width:auto;transform:scaleX(1)}
+  .hero-photo{width:132px}
+  .hero-photo .accent,.hero-photo .accent-b{width:44px;height:44px;top:-7px;right:-7px}
+  .hero-photo .accent-b{top:auto;right:auto;bottom:-7px;left:-7px}
+  #contact .hero-links{flex-direction:column;gap:10px}
+  #contact .hero-links a{width:100%;justify-content:center}
+}
+@media(max-width:479px){
+  .hero-links{flex-direction:column;gap:10px}
+  .hero-links a{width:100%;justify-content:center}
+}
+/* Narrow phones: tighten the brand and links so the nav fits without scrolling */
 @media(max-width:420px){
-  nav .inner{padding:12px 16px}
+  nav .inner{gap:6px;padding:6px 12px}
   nav .brand{font-size:1rem}
-  nav .navlinks{gap:10px;font-size:0.74rem}
+  nav .navlinks{font-size:0.74rem}
+  nav .navlinks a{padding:0 5px}
+  nav .navlinks a::after{left:5px;right:5px}
 }
 @media(max-width:350px){
-  nav .navlinks{gap:8px;font-size:0.7rem;min-width:0;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
-  nav .navlinks::-webkit-scrollbar{display:none}
-  nav .brand{font-size:0.92rem}
+  nav .inner{padding:6px 10px}
+  nav .brand{font-size:0.86rem}
+  nav .navlinks{font-size:0.68rem}
+  nav .navlinks a{padding:0 3px}
+  nav .navlinks a::after{left:3px;right:3px}
 }
