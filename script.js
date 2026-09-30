@@ -237,7 +237,17 @@ document.addEventListener('click', e => {
   }
 });
 
-// Render skills photos
+// Generic gallery renderer
+function renderGallery(containerId, photos) {
+  if (!photos || photos.length === 0) return;
+
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.appendChild(buildGallery(photos));
+}
+
+// Render skills photos (creates container at bottom of #more if needed)
 function renderSkillsPhotos() {
   if (!skillsPhotos || skillsPhotos.length === 0) return;
 
@@ -292,33 +302,68 @@ window.addEventListener('load', () => {
   });
 });
 
-// Active nav link on scroll
+// Active nav link on scroll (scroll handler with requestAnimationFrame throttling)
 const navMap = { education: null, experience: null, more: null };
 document.querySelectorAll('nav .navlinks a[href^="#"]').forEach(a => {
   const id = a.getAttribute('href').slice(1);
   if (id in navMap) navMap[id] = a;
 });
 
-const sectionObs = new IntersectionObserver((entries) => {
-  entries.forEach(en => {
-    if (en.isIntersecting) {
-      Object.values(navMap).forEach(a => a && a.classList.remove('active'));
-      const id = en.target.id;
-      if (navMap[id]) navMap[id].classList.add('active');
-    }
-  });
-}, { threshold: 0.3, rootMargin: '-80px 0px -50% 0px' });
+let scrollFrameScheduled = false;
+function updateActiveNavLink() {
+  scrollFrameScheduled = false;
 
-['education', 'experience', 'more'].forEach(id => {
-  const s = document.getElementById(id);
-  if (s) sectionObs.observe(s);
-});
+  const sections = ['education', 'experience', 'more'];
+  const edSection = document.getElementById('education');
+  const h = document.documentElement;
+  const scrollHeight = h.scrollHeight;
+  const clientHeight = h.clientHeight;
+  const scrollY = h.scrollTop;
+
+  // Clear all active links
+  Object.values(navMap).forEach(a => a && a.classList.remove('active'));
+
+  // If above education section, no link active
+  if (edSection && edSection.getBoundingClientRect().top > 120) {
+    return;
+  }
+
+  // At very bottom of page, activate Skills
+  if (scrollY + clientHeight >= scrollHeight - 2) {
+    if (navMap['more']) navMap['more'].classList.add('active');
+    return;
+  }
+
+  // Find the last section whose top is <= 120px
+  let activeId = null;
+  for (const id of sections) {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 120) {
+      activeId = id;
+    }
+  }
+
+  if (activeId && navMap[activeId]) {
+    navMap[activeId].classList.add('active');
+  }
+}
+
+window.addEventListener('scroll', () => {
+  if (!scrollFrameScheduled) {
+    scrollFrameScheduled = true;
+    requestAnimationFrame(updateActiveNavLink);
+  }
+}, { passive: true });
+
+// Initialize nav on page load
+updateActiveNavLink();
 
 // Recompute max-height on window resize
 window.addEventListener('resize', recomputeExpBodyHeights);
 
 // Initialize (scripts are at end of body, so DOM is ready)
 renderExperiences();
+renderGallery('documentary-photos', documentaryPhotos);
 renderSkillsPhotos();
 
 // Set up modal/dialog interactions

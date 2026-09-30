@@ -4,6 +4,7 @@
  * This file holds all the editable data for the website:
  * - experiences: array of work and volunteer experience entries
  * - skillsPhotos: array of photo entries for the Skills section gallery
+ * - documentaryPhotos: array of photo entries for the Education section (documentary award)
  *
  * To edit experiences:
  * 1. Modify the fields in the experiences array objects:
@@ -21,6 +22,9 @@
  *
  * To add photos to the Skills section gallery:
  * 1. Add objects to the skillsPhotos array with the same structure as above
+ *
+ * To add photos to the Education section:
+ * 1. Add objects to the documentaryPhotos array with the same structure as above
  */
 
 const experiences = [
@@ -35,7 +39,10 @@ const experiences = [
       'Wrote appellate briefs with direct guidance from the Chief Appellate Attorney.',
       'Worked on active defense trial teams for federal cases and conducted in-depth legal research.'
     ],
-    photos: []
+    photos: [
+      {src: 'images/fpd-1.jpg', alt: 'Josh with fellow interns outside the William Kenzo Nakamura U.S. Courthouse in Seattle', caption: 'Outside the Nakamura U.S. Courthouse, Seattle'},
+      {src: 'images/fpd-2.jpg', alt: 'Josh and two fellow interns at the Big Quilcene Trail trailhead', caption: 'Hiking the Big Quilcene Trail with fellow interns'}
+    ]
   },
   {
     id: 'tedx',
@@ -73,7 +80,9 @@ const experiences = [
       'Researched legal issues related to AI to inform case strategy, focusing on copyright and patent infringement.',
       'Drafted briefs for partners and clients on updates to global AI policy, including the EU AI Act.'
     ],
-    photos: []
+    photos: [
+      {src: 'images/clo-1.jpg', alt: 'Josh with fellow summer associates in the Christopher & Lee Ong office', caption: 'Summer associates at Christopher & Lee Ong, Kuala Lumpur'}
+    ]
   },
   {
     id: 'rij',
@@ -97,7 +106,9 @@ const experiences = [
       'Redacted and delivered critical case discovery to incarcerated clients while overseeing secure document review.',
       'Observed felony jury trials and discussed investigative strategy with county Investigations Specialists.'
     ],
-    photos: []
+    photos: [
+      {src: 'images/pierce-1.jpg', alt: 'Josh having lunch with Pierce County Department of Public Defense colleagues', caption: 'Lunch with the Pierce County DPD team'}
+    ]
   },
   {
     id: 'sun',
@@ -109,8 +120,15 @@ const experiences = [
       'Taught public speaking, mathematics, and English at a low-income multi-tribal school with 250+ students (ages 5–16).',
       'Advanced community-building initiatives between neighboring tribal groups to promote regional stability and peace.'
     ],
-    photos: []
+    photos: [
+      {src: 'images/kachai-1.jpg', alt: 'Students in traditional dress performing a dance in the schoolyard in Kachai', caption: 'Students performing a traditional dance, Kachai'},
+      {src: 'images/kachai-2.jpg', alt: 'Josh with his class of students in their classroom', caption: 'With my students in Kachai'}
+    ]
   }
 ];
 
 const skillsPhotos = [];
+
+const documentaryPhotos = [
+  {src: 'images/torties-1.jpg', alt: 'Josh with fellow award winners holding trophies at the Harvard Law School Torties', caption: 'Accepting Best Documentary at the Torties'}
+];

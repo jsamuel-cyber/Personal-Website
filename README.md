@@ -61,6 +61,13 @@ In `index.html`:
    ];
    ```
 
+4. For Education section photos (e.g., documentary award), edit `documentaryPhotos` in `content.js`:
+   ```javascript
+   const documentaryPhotos = [
+     { src: 'images/torties-1.jpg', alt: 'Description', caption: 'Caption' }
+   ];
+   ```
+
 ### Replacing PDFs
 
 In the **`docs/`** folder on GitHub:
