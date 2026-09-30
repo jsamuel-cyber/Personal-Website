@@ -55,7 +55,10 @@ const experiences = [
       'Spearheaded speaker selection of hundreds of applicants, training them in public speaking and narrative crafting.',
       'Directed efforts across marketing, finance, technology, and stage design to earn the organization a high Net Promoter Score.'
     ],
-    photos: []
+    photos: [
+      {src: 'images/tedx-1.jpg', alt: 'The TEDxBrownU organizing team posing on stage beneath the TEDxBrownU screen', caption: 'The TEDxBrownU team'},
+      {src: 'images/tedx-2.jpg', alt: 'Josh hosting on the TEDxBrownU stage, speaking into a microphone', caption: 'Hosting TEDxBrownU'}
+    ]
   },
   {
     id: 'hcm',

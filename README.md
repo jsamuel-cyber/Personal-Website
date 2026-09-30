@@ -4,9 +4,15 @@ A fast, easy-to-edit personal website built with plain HTML, CSS, and JavaScript
 
 ## Quick Start
 
-The website is live at: https://jsamuel-cyber.github.io/Personal-Website/
+The website is live at: https://joshuasamuel.org
 
 Changes you make are published automatically within ~1 minute after you commit to GitHub Pages.
+
+## Custom Domain
+
+The website uses a custom domain (joshuasamuel.org). The `CNAME` file in the repo root contains the domain configuration and must not be deleted. If you need to change the custom domain in the future:
+1. Edit the `CNAME` file with the new domain name
+2. Update the repository settings at Settings → Pages → Custom domain
 
 To enable GitHub Pages:
 1. Go to https://github.com/jsamuel-cyber/Personal-Website/settings/pages
@@ -53,6 +59,7 @@ In `index.html`:
      { src: 'images/fpd-1.jpg', alt: 'Team photo', caption: 'Summer internship' }
    ]
    ```
+   In the photo viewer, photos can be browsed with the arrow keys, arrow buttons, or a swipe gesture.
 
 3. For Skills section photos, edit `skillsPhotos` at the bottom of `content.js`:
    ```javascript
