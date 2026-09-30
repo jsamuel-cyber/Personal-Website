@@ -1,7 +1,7 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
 :root{
-  --nav-h:64px;
+  --nav-h:65px;
   --fs-xs:0.75rem;
   --fs-sm:0.875rem;
   --fs-base:1rem;
@@ -11,7 +11,7 @@
   --crimson-bright:#b8283f;
   --ink:#211d1a;
   --ink-soft:#4a453f;
-  --muted:#736a61;
+  --muted:#6a6158;
   --line:#e7dfd4;
   --line-soft:#efe9df;
   --paper:#faf6ef;
@@ -39,7 +39,7 @@
   }
 }
 
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 8px)}
 body{
   font-family:'Inter',-apple-system,sans-serif;
   color:var(--ink);
@@ -61,7 +61,7 @@ body::before{
 
 /* NAV */
 nav{position:sticky;top:0;z-index:50;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-nav .inner{max-width:1040px;margin:0 auto;padding:15px 32px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+nav .inner{max-width:1040px;margin:0 auto;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;gap:12px}
 nav .brand{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:600;color:var(--ink);letter-spacing:-0.02em;transition:color 0.2s;white-space:nowrap}
 nav .brand:hover{color:var(--crimson);text-decoration:none}
 nav .navlinks{display:flex;gap:26px;font-size:var(--fs-sm);font-weight:500;align-items:center}
@@ -73,7 +73,7 @@ nav .navlinks a:hover::after,nav .navlinks a.active::after{width:100%}
 main{max-width:1040px;margin:0 auto;padding:0 32px;position:relative;z-index:2}
 
 /* HERO */
-.hero{display:grid;grid-template-columns:1fr 240px;gap:40px;padding:44px 0 34px;align-items:center}
+.hero{display:grid;grid-template-columns:1fr 240px;gap:40px;padding:48px 0 32px;align-items:center}
 .hero-intro .eyebrow{font-size:var(--fs-xs);font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .hero-intro .eyebrow::before{content:'';width:26px;height:1.5px;background:var(--crimson);display:inline-block}
 .hero-intro h1{font-family:'Inter',sans-serif;font-size:3rem;line-height:1.15;font-weight:600;letter-spacing:-0.035em;color:var(--ink);margin-bottom:14px}
@@ -89,10 +89,9 @@ main{max-width:1040px;margin:0 auto;padding:0 32px;position:relative;z-index:2}
 .hero-photo img{width:100%;height:auto;display:block;border-radius:3px;box-shadow:0 12px 32px var(--shadow-photo)}
 
 /* SECTION */
-section{padding:56px 0;border-top:1px solid var(--line)}
-.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+section{padding:64px 0;border-top:1px solid var(--line)}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:24px}
 .sec-head h2{font-family:'Fraunces',serif;font-size:2rem;line-height:1.15;font-weight:600;color:var(--ink);letter-spacing:-0.02em;white-space:nowrap}
-.sec-head .rule{flex:1;height:1px;background:linear-gradient(to right,var(--line),transparent)}
 
 /* EDUCATION */
 .edu{margin-bottom:24px}
@@ -104,7 +103,7 @@ section{padding:56px 0;border-top:1px solid var(--line)}
 .edu .involve{font-size:var(--fs-base);color:var(--ink-soft);line-height:1.6}
 .edu .involve .lbl{font-weight:600;font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:2px;color:var(--muted)}
 
-.notable{margin-top:16px;padding-left:18px;border-left:2px solid var(--notable-line)}
+.notable{margin-top:16px}
 .notable .nlabel{font-size:var(--fs-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:14px}
 .nitem{margin-bottom:14px}
 .nitem:last-child{margin-bottom:0}
@@ -115,8 +114,8 @@ section{padding:56px 0;border-top:1px solid var(--line)}
 .nitem .award{font-size:var(--fs-base);color:var(--crimson-deep);font-weight:600;margin-top:6px}
 
 .nitem .priv{font-size:var(--fs-base);color:var(--muted);font-style:italic;margin-top:4px}
-.ngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:6px}
-.ngrid .type{font-size:var(--fs-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--crimson);margin-bottom:5px}
+.ngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:6px}
+.ngrid .type{font-size:var(--fs-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:5px}
 .ngrid h5{font-size:var(--fs-md);line-height:1.25}
 .ngrid p{font-size:var(--fs-base);margin-top:5px}
 
@@ -168,16 +167,14 @@ section{padding:56px 0;border-top:1px solid var(--line)}
 /* SKILLS & INTERESTS */
 .two-col{display:grid;grid-template-columns:auto auto;gap:80px;justify-content:start}
 .two-col h3{font-family:'Fraunces',serif;font-size:var(--fs-md);line-height:1.25;font-weight:600;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:9px}
-.two-col h3::before{content:'';width:16px;height:2px;background:var(--crimson)}
 .two-col ul{list-style:none}
 .two-col li{font-size:var(--fs-sm);color:var(--ink-soft);line-height:1.6}
 
 /* PROJECTS & CHIPS */
 .two-col ul{display:flex;flex-wrap:wrap;gap:8px;list-style:none}
-.two-col li{display:inline-flex;align-items:center;font-size:var(--fs-sm);line-height:1.4;padding:5px 11px;border:1px solid var(--line);background:var(--white);border-radius:999px;color:var(--ink-soft)}
+.two-col li{display:inline-flex;align-items:center;font-size:var(--fs-sm);line-height:1.4;padding:5px 11px;border:0;background:var(--paper-2);border-radius:999px;color:var(--ink-soft);cursor:default}
 .projects{margin-top:32px}
 .projects h3{font-family:'Fraunces',serif;font-size:var(--fs-md);line-height:1.25;font-weight:600;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:9px}
-.projects h3::before{content:'';width:16px;height:2px;background:var(--crimson)}
 .project-list{display:grid;grid-template-columns:1fr;gap:16px}
 @media(min-width:720px){.project-list{grid-template-columns:1fr 1fr}}
 .project{border:1px solid var(--line);background:var(--white);border-radius:4px;padding:18px 20px;transition:border-color .2s}
@@ -219,14 +216,13 @@ footer a:focus-visible{outline:2px solid var(--crimson);outline-offset:2px}
 @media(max-width:720px){
   section{padding:40px 0}
   main{padding:0 22px}
-  .hero{grid-template-columns:1fr;gap:28px;padding:36px 0 30px}
+  .hero{grid-template-columns:1fr;gap:24px;padding:40px 0 32px}
   .hero-photo{width:190px;order:-1}
   .hero-intro h1{font-size:2.5rem}
   .ngrid{grid-template-columns:1fr;gap:16px}
   .two-col{grid-template-columns:1fr;gap:22px}
   .exp-bar{flex-wrap:wrap}
   .exp-meta{text-align:left;width:100%;order:3;margin-top:2px}
-  nav .inner{padding:13px 22px}
   nav .brand{font-size:1.1rem}
   nav .navlinks{gap:14px;font-size:var(--fs-sm)}
   nav .navlinks .hide-sm{display:none}
@@ -427,10 +423,8 @@ nav.scrolled {
     display: inline;
   }
 
-  /* Tighter separators and card side padding so the longest line (Brown) fits on one line */
+  /* Tighter separators so the longest line (Brown) fits on one line */
   .edu .involve-items .sep { margin: 0 4px; }
-  main .edu,
-  main .edu:last-child { padding-left: 20px; padding-right: 20px; }
 }
 
 /* Link styling */
@@ -509,10 +503,10 @@ a[target="_blank"]:not(.hero-links a):not(nav a)::after {
     --crimson: #e0566d;
     --crimson-deep: #f07b8f;
     --crimson-bright: #ff8fa1;
-    --ink: #f1ebe3;
+    --ink: #e6dfd6;
     --ink-soft: #cfc6bb;
     --muted: #9b9187;
-    --line: #3a332d;
+    --line: #4a423b;
     --line-soft: #2c2622;
     --paper: #171412;
     --paper-2: #1f1b18;
@@ -577,8 +571,8 @@ main:focus { outline: none; }
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: 6px;
-  padding: 22px 24px;
-  margin-bottom: 18px;
+  padding: 24px;
+  margin-bottom: 16px;
 }
 
 /* Back to top */
@@ -631,7 +625,6 @@ main:focus { outline: none; }
 }
 
 /* EXPERIENCE CONTROLS */
-.exp { scroll-margin-top: var(--nav-h, 64px); }
 .exp-toolbar { display: flex; justify-content: flex-end; margin: -8px 0 4px; }
 .exp-toggle-all {
   display: inline-flex; align-items: center; gap: 6px;
@@ -662,7 +655,7 @@ main:focus { outline: none; }
 
 @media (max-width: 720px) {
   .edu,
-  .edu:last-child { padding: 18px; }
+  .edu:last-child { padding: 20px; }
   nav .navlinks { gap: 12px; }
 }
 
@@ -675,8 +668,7 @@ main:focus { outline: none; }
   .sec-head h2{white-space:normal}
 }
 
-/* Scroll offset so nav jumps do not hide headings under the sticky bar */
-section[id],#main{scroll-margin-top:var(--nav-h)}
+/* Scroll offset (html scroll-padding-top) keeps anchors and focus clear of the sticky nav */
 @media(max-width:719px){
   :root{--nav-h:57px}
   nav .inner{padding:6px 16px}
