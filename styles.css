@@ -186,7 +186,7 @@ section{padding:30px 0;border-top:1px solid var(--line)}
 .project-list{display:grid;grid-template-columns:1fr;gap:16px}
 @media(min-width:720px){.project-list{grid-template-columns:1fr 1fr}}
 .project{border:1px solid var(--line);background:var(--white);border-radius:4px;padding:18px 20px;transition:border-color .2s,transform .2s}
-.project:hover{border-color:rgba(158,27,50,0.4);transform:translateY(-2px)}
+.project:hover{border-color:color-mix(in srgb,var(--crimson) 40%,transparent);transform:translateY(-2px)}
 @media(prefers-reduced-motion:reduce){.project{transition:none}.project:hover{transform:none}}
 .project h4{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:4px}
 .project-meta{font-size:0.78rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-bottom:8px}
@@ -709,4 +709,19 @@ main { counter-reset: sec; }
 @media (prefers-reduced-motion: reduce) {
   .hero-photo img:hover { transform: none; }
   .to-top { transform: none; }
+}
+
+/* Small-screen fit: long section headings wrap, and the nav tightens on narrow phones */
+@media(max-width:720px){
+  .sec-head h2{white-space:normal;line-height:1.15}
+}
+@media(max-width:420px){
+  nav .inner{padding:12px 16px}
+  nav .brand{font-size:1rem}
+  nav .navlinks{gap:10px;font-size:0.74rem}
+}
+@media(max-width:350px){
+  nav .navlinks{gap:8px;font-size:0.7rem;min-width:0;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+  nav .navlinks::-webkit-scrollbar{display:none}
+  nav .brand{font-size:0.92rem}
 }
