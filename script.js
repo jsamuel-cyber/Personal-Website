@@ -93,6 +93,7 @@ function renderExperiences() {
   experiences.forEach((exp, expIdx) => {
     const expDiv = document.createElement('div');
     expDiv.className = 'exp';
+    expDiv.id = `role-${exp.id}`;
 
     const expBar = document.createElement('button');
     expBar.type = 'button';
@@ -189,12 +190,10 @@ function renderExperiences() {
       expBody.appendChild(modifiedBuildGallery);
     }
 
-    expBar.addEventListener('click', () => {
-      toggleExp(exp.id);
-      if (expIdx === 0) {
-        expBar.setAttribute('aria-expanded', 'true');
-      }
-    });
+    expBody.appendChild(buildCopyLink(exp.id));
+    if (expIdx !== 0) expBody.inert = true; // closed rows keep their controls out of the tab order
+
+    expBar.addEventListener('click', () => toggleExp(exp.id));
 
     expDiv.appendChild(expBar);
     expDiv.appendChild(expBody);
@@ -206,25 +205,178 @@ function renderExperiences() {
   });
 }
 
-function toggleExp(id) {
+// Single source of truth for opening/closing a row. opts.updateHash: replace the URL hash when opening.
+function setExpOpen(id, open, opts) {
   const body = document.getElementById(`body-${id}`);
   const plus = document.getElementById(`plus-${id}`);
+  if (!body || !plus) return;
   const bar = plus.closest('.exp-bar');
   const srText = document.getElementById(`sr-text-${id}`);
 
-  const isOpen = body.classList.toggle('open');
-  plus.classList.toggle('open', isOpen);
-  bar.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  body.classList.toggle('open', open);
+  body.inert = !open;
+  plus.classList.toggle('open', open);
+  bar.setAttribute('aria-expanded', open ? 'true' : 'false');
   if (srText) {
-    srText.textContent = isOpen ? 'Hide details' : 'View details';
+    srText.textContent = open ? 'Hide details' : 'View details';
   }
+  body.style.maxHeight = open ? body.scrollHeight + 'px' : '0px';
 
-  if (isOpen) {
-    body.style.maxHeight = body.scrollHeight + 'px';
-  } else {
-    body.style.maxHeight = '0px';
+  if (open && opts && opts.updateHash) {
+    history.replaceState(null, '', `#role-${id}`);
+  }
+  syncToggleAll();
+}
+
+// Row header click (a user action)
+function toggleExp(id) {
+  const body = document.getElementById(`body-${id}`);
+  const open = !body.classList.contains('open');
+  setExpOpen(id, open, { updateHash: true });
+  if (open) ensureExpHeaderVisible(id);
+}
+
+/* ===== EXPERIENCE CONTROLS: show/hide all, deep links, copy link, mobile visibility ===== */
+const expPrefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const expNavHeight = () => {
+  const nav = document.querySelector('nav');
+  return nav ? nav.getBoundingClientRect().bottom : 0;
+};
+
+function allExpOpen() {
+  const bars = document.querySelectorAll('#exp-list .exp-bar');
+  return bars.length > 0 && Array.from(bars).every(b => b.getAttribute('aria-expanded') === 'true');
+}
+
+// Keep the "Show all roles" / "Hide all roles" button in step with the rows
+function syncToggleAll() {
+  const btn = document.querySelector('.exp-toggle-all');
+  if (!btn) return;
+  const all = allExpOpen();
+  btn.classList.toggle('is-open', all);
+  const label = btn.querySelector('.exp-toggle-label');
+  if (label) label.textContent = all ? 'Hide all roles' : 'Show all roles';
+}
+
+// On narrow screens, bring a just-opened row's header under the sticky nav if it would be cut off
+function ensureExpHeaderVisible(id) {
+  if (window.innerWidth >= 720) return;
+  const bar = document.getElementById(`role-${id}`).querySelector('.exp-bar');
+  const body = document.getElementById(`body-${id}`);
+  const navBottom = expNavHeight();
+  const r = bar.getBoundingClientRect();
+  const finalBottom = r.bottom + body.scrollHeight;
+  if (r.top < navBottom || finalBottom > window.innerHeight) {
+    const target = Math.max(0, Math.floor(r.top + window.scrollY - navBottom));
+    if (Math.abs(target - window.scrollY) >= 1) {
+      window.scrollTo({ top: target, behavior: expPrefersReducedMotion() ? 'instant' : 'smooth' });
+    }
   }
 }
+
+function expIdFromHash() {
+  const m = /^#role-([\w-]+)$/.exec(location.hash);
+  return m && document.getElementById(`body-${m[1]}`) ? m[1] : null;
+}
+
+// Scroll a row so its top sits at or just below the sticky nav (floor keeps it from tucking under by a sub-pixel)
+function scrollExpToNav(id, smooth) {
+  const el = document.getElementById(`role-${id}`);
+  const y = Math.floor(el.getBoundingClientRect().top + window.scrollY - expNavHeight());
+  window.scrollTo({ top: Math.max(0, y), behavior: smooth && !expPrefersReducedMotion() ? 'smooth' : 'instant' });
+}
+
+// Open + scroll to the row named by the URL hash
+function openExpFromHash(smooth) {
+  const id = expIdFromHash();
+  if (!id) return false;
+  setExpOpen(id, true);
+  scrollExpToNav(id, smooth);
+  return true;
+}
+
+function buildCopyLink(id) {
+  const wrap = document.createElement('div');
+  wrap.className = 'exp-copy-row';
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'exp-copy';
+  btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg><span class="exp-copy-label">Copy link to this role</span>';
+
+  const live = document.createElement('span');
+  live.className = 'sr-only';
+  live.setAttribute('aria-live', 'polite');
+
+  let timer = null;
+  const label = btn.querySelector('.exp-copy-label');
+  btn.addEventListener('click', async () => {
+    const url = location.origin + location.pathname + `#role-${id}`;
+    let ok = false;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(url);
+        ok = true;
+      }
+    } catch (e) { /* fall through to the fallback */ }
+    if (!ok) ok = copyTextFallback(url, wrap);
+    const msg = ok ? 'Link copied' : 'Could not copy link';
+    label.textContent = msg;
+    live.textContent = msg;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      label.textContent = 'Copy link to this role';
+      live.textContent = '';
+    }, 2000);
+  });
+
+  wrap.appendChild(btn);
+  wrap.appendChild(live);
+  return wrap;
+}
+
+// Fallback when the async clipboard API is unavailable: select a hidden input and execCommand('copy')
+function copyTextFallback(text, parent) {
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = text;
+  input.readOnly = true;
+  input.setAttribute('aria-hidden', 'true');
+  input.tabIndex = -1;
+  input.style.cssText = 'position:absolute;left:-9999px;top:0;opacity:0';
+  parent.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, text.length);
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  input.remove();
+  return ok;
+}
+
+function initExpControls() {
+  const toggleAll = document.querySelector('.exp-toggle-all');
+  if (toggleAll) {
+    toggleAll.addEventListener('click', () => {
+      const open = !allExpOpen();
+      experiences.forEach(exp => setExpOpen(exp.id, open));
+    });
+  }
+  syncToggleAll();
+
+  // Deep link on load; re-align once after load in case fonts/images shifted the layout
+  if (openExpFromHash(false)) {
+    let userScrolled = false;
+    const mark = () => { userScrolled = true; };
+    ['wheel', 'touchstart', 'keydown'].forEach(t => window.addEventListener(t, mark, { once: true, passive: true }));
+    window.addEventListener('load', () => {
+      if (!userScrolled && expIdFromHash()) {
+        scrollExpToNav(expIdFromHash(), false);
+      }
+    });
+  }
+  window.addEventListener('hashchange', () => openExpFromHash(true));
+}
+/* ===== END EXPERIENCE CONTROLS ===== */
 
 function recomputeExpBodyHeights() {
   document.querySelectorAll('.exp-body.open').forEach(body => {
@@ -495,6 +647,7 @@ window.addEventListener('resize', recomputeExpBodyHeights);
 
 // Initialize (scripts are at end of body, so DOM is ready)
 renderExperiences();
+initExpControls();
 renderGallery('documentary-photos', documentaryPhotos);
 renderSkillsPhotos();
 
