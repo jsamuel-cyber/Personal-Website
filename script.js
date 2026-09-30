@@ -112,29 +112,6 @@ function renderExperiences() {
     expRole.className = 'exp-role';
     expRole.textContent = exp.role;
 
-    // Add photo badge if photos exist
-    if (exp.photos && exp.photos.length > 0) {
-      const badge = document.createElement('div');
-      badge.className = 'exp-badge';
-      
-      const SVG_NS = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(SVG_NS, 'svg');
-      svg.setAttribute('viewBox', '0 0 24 24');
-      svg.setAttribute('fill', 'currentColor');
-      svg.setAttribute('aria-hidden', 'true');
-      svg.setAttribute('focusable', 'false');
-      const path = document.createElementNS(SVG_NS, 'path');
-      path.setAttribute('d', 'M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z');
-      svg.appendChild(path);
-      badge.appendChild(svg);
-      
-      const text = document.createElement('span');
-      text.textContent = exp.photos.length === 1 ? '1 photo' : `${exp.photos.length} photos`;
-      badge.appendChild(text);
-      
-      expRole.appendChild(badge);
-    }
-
     expMain.appendChild(expTitle);
     expMain.appendChild(expRole);
 
@@ -546,46 +523,6 @@ function renderSkillsPhotos() {
 
   renderGallery('skills-photos', skillsPhotos);
 }
-
-// Scroll progress bar
-const progress = document.getElementById('progress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const scrollableHeight = h.scrollHeight - h.clientHeight;
-  if (scrollableHeight <= 0) {
-    progress.style.width = '0%';
-  } else {
-    const scrolled = (h.scrollTop / scrollableHeight) * 100;
-    progress.style.width = scrolled + '%';
-  }
-}, { passive: true });
-
-// Reveal on scroll
-const revealObs = new IntersectionObserver((entries) => {
-  entries.forEach(en => {
-    if (en.isIntersecting) {
-      en.target.classList.add('in');
-      revealObs.unobserve(en.target);
-    }
-  });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
-// Safety: never leave content hidden
-setTimeout(() => {
-  document.querySelectorAll('.reveal:not(.in)').forEach(el => {
-    const r = el.getBoundingClientRect();
-    if (r.top < window.innerHeight) el.classList.add('in');
-  });
-}, 400);
-
-window.addEventListener('load', () => {
-  document.querySelectorAll('.reveal').forEach(el => {
-    const r = el.getBoundingClientRect();
-    if (r.top < window.innerHeight + 100) el.classList.add('in');
-  });
-});
 
 // Active nav link on scroll (scroll handler with requestAnimationFrame throttling)
 const navMap = { education: null, experience: null, more: null, contact: null };
