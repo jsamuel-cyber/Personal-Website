@@ -416,7 +416,7 @@ window.addEventListener('load', () => {
 });
 
 // Active nav link on scroll (scroll handler with requestAnimationFrame throttling)
-const navMap = { education: null, experience: null, more: null };
+const navMap = { education: null, experience: null, more: null, contact: null };
 document.querySelectorAll('nav .navlinks a[href^="#"]').forEach(a => {
   const id = a.getAttribute('href').slice(1);
   if (id in navMap) navMap[id] = a;
@@ -426,7 +426,7 @@ let scrollFrameScheduled = false;
 function updateActiveNavLink() {
   scrollFrameScheduled = false;
   
-  const sections = ['education', 'experience', 'more'];
+  const sections = ['education', 'experience', 'more', 'contact'];
   const edSection = document.getElementById('education');
   const h = document.documentElement;
   const scrollHeight = h.scrollHeight;
@@ -441,6 +441,10 @@ function updateActiveNavLink() {
     nav.classList.remove('scrolled');
   }
   
+  // Floating back-to-top button
+  const toTop = document.querySelector('.to-top');
+  if (toTop) toTop.classList.toggle('show', scrollY > 600);
+
   // Clear all active links
   Object.values(navMap).forEach(a => a && a.classList.remove('active'));
   
@@ -449,9 +453,9 @@ function updateActiveNavLink() {
     return;
   }
   
-  // At very bottom of page, activate Skills
+  // At very bottom of page, activate Contact
   if (scrollY + clientHeight >= scrollHeight - 2) {
-    if (navMap['more']) navMap['more'].classList.add('active');
+    if (navMap['contact']) navMap['contact'].classList.add('active');
     return;
   }
   
@@ -475,6 +479,13 @@ window.addEventListener('scroll', () => {
     requestAnimationFrame(updateActiveNavLink);
   }
 }, { passive: true });
+
+// Back to top: scroll up (instantly under reduced motion) and move focus to <main>
+document.querySelector('.to-top').addEventListener('click', () => {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  document.getElementById('main').focus({ preventScroll: true });
+});
 
 // Initialize nav on page load
 updateActiveNavLink();
