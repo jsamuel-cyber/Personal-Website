@@ -36,17 +36,18 @@ To enable GitHub Pages:
 - Add photos to the `photos` array for any experience
 
 **`index.html`** — Everything else:
-- Education section (schools, dates, involvement)
-- "Skills, Interests, and Projects" section (skills and interests lists, plus projects)
-- Projects are the `<article class="project">` blocks in the "Skills, Interests, and Projects" section; copy one to add another.
+- Hero text, places list and PDF buttons (top of the page)
+- Education section (schools, degrees, activities, notable work cards)
+- "Skills, Interests, and Projects" section (skills and interests chips, plus projects)
+- Projects are the `<article class="card project">` blocks in that section; copy one to add another.
 
 **PDF files in `docs/`** — Upload new PDFs with the same name to replace them.
 
 ### Editing the Education / Skills text
 
-In `index.html`:
-- Lines 56–108: Education section (schools, degrees, involvement, notable work)
-- Lines 118–143: Skills & Interests list
+In `index.html`, find the section by its id and edit the text in place:
+- `id="education"`: schools, degrees, activities (each activity is one `<li>`; numbers are added automatically) and notable work cards
+- `id="more"`: the skills and interests lists (one `<li>` per chip) and the projects
 
 ### Adding photos
 
@@ -57,10 +58,10 @@ In `index.html`:
 2. In `content.js`, add photos to any experience's `photos` array:
    ```javascript
    photos: [
-     { src: 'images/fpd-1.jpg', alt: 'Team photo', caption: 'Summer internship' }
+     { src: 'images/fpd-1.jpg', alt: 'Team photo', caption: 'Summer internship', position: 'center 30%' }
    ]
    ```
-   In the photo viewer, photos can be browsed with the arrow keys, arrow buttons, or a swipe gesture.
+   `position` is optional: a CSS `object-position` for the cropped thumbnail (default `center 30%`); use it when the default crop cuts off a face, for example `'10% 30%'`. Captions are not shown under the thumbnails; they appear only in the photo viewer, where photos can be browsed with the arrow keys, arrow buttons, or a swipe gesture.
 
 3. For Skills section photos, edit `skillsPhotos` at the bottom of `content.js`:
    ```javascript
@@ -82,7 +83,7 @@ In the **`docs/`** folder on GitHub:
 1. Click the PDF you want to replace
 2. Click the **trash icon** (or upload a file with the same name)
 3. Commit the change
-4. If the new PDF has a different number of pages, update the `PDF_PAGES` lookup near the top of the "Add link icons and pills" section in `script.js` (for example `'docs/resume.pdf': 1`). The page count shown in each PDF pill ("PDF · 1 p") comes from that lookup; PDFs not listed there just show "PDF".
+4. If the new PDF has a different number of pages, update the `PDF_PAGES` lookup near the bottom of `script.js` (above `decorateLinks`) (for example `'docs/resume.pdf': 1`). The page count shown in each PDF pill ("PDF · 1 page") comes from that lookup; PDFs not listed there just show "PDF".
 
 ## For Developers
 
@@ -99,7 +100,7 @@ Then open http://localhost:8000 in your browser.
 ### Architecture
 
 - `index.html` — Page structure and static content
-- `styles.css` — All styles
+- `styles.css` — All styles (colour, type and spacing tokens are at the top; fonts: Libre Caslon Display and Text for headings, Inter for body, loaded from Google Fonts in `index.html`)
 - `content.js` — Editable experience data (your resume)
 - `script.js` — Vanilla JavaScript (no dependencies)
 - `images/` — Photos for galleries
@@ -107,6 +108,6 @@ Then open http://localhost:8000 in your browser.
 
 ## Search and sharing
 
-- The link preview (iMessage, LinkedIn, Slack, etc.) uses `images/og-card.png` (1200x630). Regenerate it if the headshot changes.
+- The link preview (iMessage, LinkedIn, Slack, etc.) uses `images/og-card.png` (1200x630). Regenerate it if the headshot (`images/headshot.jpg`) changes. The hero portrait on the page is `images/photo.jpg` and the contact photo is `images/tedx-2.jpg`.
 - `robots.txt` and `sitemap.xml` live in the repo root.
 - After the domain is live, verify it in Google Search Console and submit the sitemap (`https://joshuasamuel.org/sitemap.xml`).

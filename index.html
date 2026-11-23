@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-type="service" data-radius="soft" data-buttons="arrow">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
+<meta name="page-type" content="service">
+<meta name="site-kind" content="other">
+<meta name="theme-color" content="#faf6ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)">
 <meta name="description" content="Joshua Samuel: Harvard Law School J.D. candidate (2028) and aspiring litigator. Education, experience, and writing.">
 <meta property="og:title" content="Joshua Samuel | Harvard Law J.D. Candidate 2028">
 <meta property="og:site_name" content="Joshua Samuel">
@@ -48,178 +52,254 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<!-- deal: kind=service, site-kind=other | hero=portrait-right split, nav=nav-split, footer=footer-dark, close=close-photo | rhythm=space, buttons=arrow, radius=soft | type=Libre Caslon Display + Libre Caslon Text + Inter | palette=crimson on warm paper -->
+
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <symbol id="i-arrow" viewBox="0 0 16 16"><path d="M2 8h11M9 3.5 13.5 8 9 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-out" viewBox="0 0 16 16"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
 <a class="skip-link" href="#main">Skip to content</a>
 
-<nav>
-  <div class="inner">
-    <span class="brand">Joshua Samuel</span>
-    <div class="navlinks">
-      <a href="#education">Education</a>
-      <a href="#experience">Experience</a>
-      <a href="#more">Projects</a>
-      <a href="#contact">Contact</a>
-      <a class="hide-sm" href="https://www.linkedin.com/in/joshua-samuel2002/" target="_blank" rel="noopener">LinkedIn</a>
+<header class="site-header">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">Joshua Samuel</a>
+    <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu">Menu</button>
+    <div class="menu" id="menu">
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="#education">Education</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#more">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="https://www.linkedin.com/in/joshua-samuel2002/" target="_blank" rel="noopener">LinkedIn</a></li>
+        </ul>
+      </nav>
+      <div class="menu-extra">
+        <a class="btn btn--primary" href="mailto:jsamuel@jd28.law.harvard.edu"><span>Email</span><svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn--ghost" href="docs/resume.pdf" target="_blank" rel="noopener"><span>Resume</span><span class="pill-slot"></span><svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
     </div>
   </div>
-</nav>
+</header>
 
 <main id="main" tabindex="-1">
 
   <!-- HERO -->
-  <div class="hero">
-    <div class="hero-intro">
-      <div class="eyebrow"><span class="ey-part">Harvard Law School &middot;</span><span class="ey-part">J.D. Candidate 2028</span></div>
-      <h1>Hi, I&rsquo;m Josh</h1>
-      <div class="location"><span class="dot"></span><span class="loc-items"><span class="city">Seattle, WA</span><span class="sep">|</span><wbr><span class="city">Kuala Lumpur, Malaysia</span><span class="sep">|</span><wbr><span class="city">Providence, RI</span><span class="sep">|</span><wbr><span class="city">Kachai, India</span><span class="sep">|</span><wbr><span class="city">Cambridge, MA</span></span></div>
-      <p class="bio">I'm a J.D. candidate at Harvard Law School focused on criminal defense, appellate advocacy, and the law of emerging technology. My work has taken me from the Federal Public Defender in Seattle to the High Court of Malaysia.</p>
-      <div class="hero-links">
-        <a href="docs/resume.pdf" class="primary" target="_blank" rel="noopener">View Resume</a>
-        <a href="docs/writing-sample.pdf" class="ghost" target="_blank" rel="noopener">Legal Writing Sample</a>
+  <section id="top" class="hero">
+    <div class="wrap hero-wrap">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <p class="label eyebrow rise" style="--i:0"><span class="eyebrow-text"><span class="nw">Harvard Law School</span> <span class="sep">·</span> <span class="nw">J.D. Candidate 2028</span></span></p>
+          <h1 class="rise" style="--i:1">Hi, I’m Josh</h1>
+          <p class="bio rise" style="--i:2">I’m a J.D. candidate at Harvard Law School focused on litigation and the role of AI in the future of the legal profession. My work has taken me from the Federal Public Defender in Seattle to the High Court of Malaysia.</p>
+          <div class="actions rise" style="--i:3">
+            <a class="btn btn--primary" href="docs/resume.pdf" target="_blank" rel="noopener"><span>View resume</span><span class="pill-slot"></span><svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--ghost" href="docs/writing-sample.pdf" target="_blank" rel="noopener"><span>Read writing sample</span><span class="pill-slot"></span><svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+        </div>
+        <figure class="hero-photo">
+          <img src="images/photo.jpg" alt="Joshua Samuel in a graduation gown and stole, standing in front of a dark green door" width="600" height="852" fetchpriority="high" decoding="async">
+        </figure>
       </div>
+      <ul class="route" aria-label="Places">
+        <li style="--i:0"><span class="dot" aria-hidden="true"></span><span class="city">Seattle, WA</span></li>
+        <li style="--i:1"><span class="dot" aria-hidden="true"></span><span class="city">Kuala Lumpur, Malaysia</span></li>
+        <li style="--i:2"><span class="dot" aria-hidden="true"></span><span class="city">Providence, RI</span></li>
+        <li style="--i:3"><span class="dot" aria-hidden="true"></span><span class="city">Kachai, India</span></li>
+        <li style="--i:4"><span class="dot" aria-hidden="true"></span><span class="city">Cambridge, MA</span></li>
+      </ul>
     </div>
-    <div class="hero-photo">
-      <img src="images/headshot.jpg" alt="Joshua Samuel" width="360" height="450" fetchpriority="high" decoding="async">
-    </div>
-  </div>
+  </section>
 
   <!-- EDUCATION -->
   <section id="education">
-    <div class="sec-head"><h2 class="serif">Education</h2></div>
+    <div class="wrap">
+      <h2>Education</h2>
 
-    <div class="edu">
-      <div class="edu-top"><h3 class="serif">Harvard Law School</h3><span class="dates">Sep 2025 &ndash; Present</span></div>
-      <div class="degree">J.D. Candidate, 2028</div>
-      <div class="involve">
-        <span class="lbl">Involvement</span>
-        <span class="involve-items">AISST AI Policy Fellow<span class="sep">·</span>Consumer Protection Clinic<span class="sep">·</span>Harvard Plaintiff Law Association<span class="sep">·</span>South Asian Law Student Association<span class="sep">·</span>Club Soccer</span>
-      </div>
-      <div class="notable">
-        <div class="nlabel">Notable Work</div>
-        <div class="nitem">
-          <h5><a href="docs/ames-brief.pdf" target="_blank" rel="noopener">Ames Brief</a></h5>
-          <p>Harvard Law School moot court appellate brief.</p>
+      <article class="school">
+        <div class="school-info">
+          <h3>Harvard Law School</h3>
+          <p class="degree">J.D. Candidate, 2028</p>
+          <p class="dates">Sep 2025 – Present</p>
+          <p class="label">Activities</p>
+          <ol class="activities">
+            <li>AISST AI Policy Fellow</li>
+            <li>Consumer Protection Clinic</li>
+            <li>Ames Moot Court Round of 16</li>
+            <li>Harvard Plaintiff Law Association</li>
+            <li>South Asian Law Student Association</li>
+            <li>Club Soccer</li>
+          </ol>
         </div>
-        <div class="nitem">
-          <h5>Documentary on AI Chatbots and Suicide Liability</h5>
-          <p>Investigative legal documentary analyzing criminal liability, product liability, and ethical implications surrounding AI interaction in suicide cases.</p>
-          <div class="award">&#127942; Won Best Documentary at Harvard Law Torties</div>
-          <div class="priv">I won't share the link online for privacy reasons, but I'm happy to play it for you in person.</div>
-          <div class="inline-gallery" id="documentary-photos"></div>
+        <div class="school-work">
+          <p class="label">Notable work</p>
+          <div class="work-grid work-grid--hls">
+            <a class="card card--link" href="docs/ames-brief.pdf" target="_blank" rel="noopener">
+              <div class="link-text">
+                <p class="label">Appellate brief</p>
+                <h4>Ames Brief</h4>
+                <p>Harvard Law School moot court appellate brief.</p>
+              </div>
+              <span class="card-foot"><span class="pill-slot"></span><svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+            </a>
+            <div class="card card--doc">
+              <div class="inline-gallery" id="documentary-photos"></div>
+              <div class="doc-text">
+                <p class="label">Documentary</p>
+                <h4>Documentary on AI Chatbots and Suicide Liability</h4>
+                <p>Investigative legal documentary analyzing criminal liability, product liability, and ethical implications surrounding AI interaction in suicide cases.</p>
+                <p class="award">Won Best Documentary at Harvard Law Torties</p>
+                <p class="note">I won't share the link online for privacy reasons, but I'm happy to play it for you in person.</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </article>
 
-    <div class="edu">
-      <div class="edu-top"><h3 class="serif">Brown University</h3><span class="dates">Sep 2021 &ndash; May 2025</span></div>
-      <div class="degree">B.A. in International and Public Affairs &amp; Behavioral Decision Sciences</div>
-      <div class="involve">
-        <span class="lbl">Involvement</span>
-        <span class="involve-items">CLAS 1770 Ancient Law Teaching Assistant<span class="sep">·</span>TEDxBrownU President<span class="sep">·</span>Pre-Law Society President<span class="sep">·</span>South Asian Student Association Executive Board</span>
-      </div>
-      <div class="notable">
-        <div class="nlabel">Notable Work</div>
-        <div class="ngrid">
-          <div>
-            <div class="type">Capstone</div>
-            <h5 class="serif"><button type="button" class="modal-trigger" id="blame-trigger">Psychology of Blame for Repeat Offenders</button></h5>
-            <p>Survey of 300+ Providence community members measuring how a defendant's criminal record shapes juror perceptions of blame and fault.</p>
-          </div>
-          <div>
-            <div class="type">Capstone</div>
-            <h5 class="serif">AI Surveillance Policy: A Global Approach</h5>
-            <p>Comparative policy framework on algorithmic surveillance across civil liberties jurisdictions.</p>
-          </div>
-          <div>
-            <div class="type">Independent Study</div>
-            <h5 class="serif">Legal Persuasion in Ancient Rome &amp; Greece</h5>
-            <p>Historical analysis of rhetorical persuasion and classical courtroom tactics.</p>
+      <article class="school">
+        <div class="school-info">
+          <h3>Brown University</h3>
+          <p class="degree">B.A. in International and Public Affairs &amp; Behavioral Decision Sciences</p>
+          <p class="dates">Sep 2021 – May 2025</p>
+          <p class="label">Activities</p>
+          <ol class="activities">
+            <li>CLAS 1770 Ancient Law Teaching Assistant</li>
+            <li>TEDxBrownU President</li>
+            <li>Pre-Law Society President</li>
+            <li>South Asian Student Association Executive Board</li>
+          </ol>
+        </div>
+        <div class="school-work">
+          <p class="label">Notable work</p>
+          <div class="work-grid work-grid--brown">
+            <div class="card">
+              <p class="label">Capstone</p>
+              <h4>Psychology of Blame for Repeat Offenders</h4>
+              <p>Survey of 300+ Providence community members measuring how a defendant's criminal record shapes juror perceptions of blame and fault.</p>
+              <button type="button" class="text-btn" id="blame-trigger"><span>Read summary</span><svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            </div>
+            <div class="card">
+              <p class="label">Capstone</p>
+              <h4>AI Surveillance Policy: A Global Approach</h4>
+              <p>Comparative policy framework on algorithmic surveillance across civil liberties jurisdictions.</p>
+            </div>
+            <div class="card">
+              <p class="label">Independent Study</p>
+              <h4>Legal Persuasion in Ancient Rome &amp; Greece</h4>
+              <p>Historical analysis of rhetorical persuasion and classical courtroom tactics.</p>
+            </div>
           </div>
         </div>
-      </div>
+      </article>
     </div>
   </section>
 
   <!-- EXPERIENCE -->
   <section id="experience">
-    <div class="sec-head"><h2 class="serif">Experience</h2></div>
-    <div class="exp-toolbar">
-      <button type="button" class="exp-toggle-all" aria-controls="exp-list"><span class="exp-toggle-label">Expand all</span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg></button>
+    <div class="wrap">
+      <h2>Experience</h2>
+      <div class="exp-toolbar">
+        <button type="button" class="exp-toggle-all text-btn" aria-controls="exp-list"><span class="exp-toggle-label">Expand all</span></button>
+      </div>
+      <div id="exp-list"></div>
     </div>
-    <div id="exp-list"></div>
   </section>
 
-  <!-- SKILLS & INTERESTS -->
+  <!-- SKILLS, INTERESTS, PROJECTS -->
   <section id="more">
-    <div class="sec-head"><h2 class="serif">Skills, Interests, and Projects</h2></div>
-    <div class="two-col">
-      <div>
-        <h3 class="serif">Skills</h3>
-        <ul>
-          <li>Spanish</li>
-          <li>Public Speaking</li>
-          <li>Cross-Cultural Communication</li>
-          <li>De-escalation Techniques</li>
-          <li>Teaching</li>
-          <li>Qualtrics &amp; Stata</li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="serif">Interests</h3>
-        <ul>
-          <li>Vipassana Meditation</li>
-          <li>Dog Training</li>
-          <li>Juror Psychology</li>
-          <li>Evolution of Soccer Tactics</li>
-          <li>International Films</li>
-          <li>Baking</li>
-          <li>Classical Piano</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="projects">
-      <h3 class="serif">Projects</h3>
-      <div class="project-list">
-        <article class="project">
-          <h4 class="serif">Law School / Undergraduate Essay Editing Service</h4>
-          <p class="project-meta">Jun 2025 &ndash; Present</p>
-          <ul>
-            <li>Email <a href="mailto:jsamuel@jd28.law.harvard.edu?subject=Essay%20editing%20inquiry">jsamuel@jd28.law.harvard.edu</a> for inquiries</li>
+    <div class="wrap">
+      <h2>Skills, Interests, and Projects</h2>
+      <div class="more-row">
+        <div>
+          <h3>Skills</h3>
+          <ul class="chips">
+            <li>Spanish</li>
+            <li>Public Speaking</li>
+            <li>Cross-Cultural Communication</li>
+            <li>De-escalation Techniques</li>
+            <li>Teaching</li>
+            <li>Qualtrics &amp; Stata</li>
           </ul>
-        </article>
-        <article class="project">
-          <h4 class="serif">Personal Writing Improvement App</h4>
-          <p class="project-desc">An app that uses AI trained on writing advice from the best writers from all over the world to help you improve your writing in just two minutes a day.</p>
-        </article>
+        </div>
+        <div>
+          <h3>Interests</h3>
+          <ul class="chips">
+            <li>Vipassana Meditation</li>
+            <li>Dog Training</li>
+            <li>Juror Psychology</li>
+            <li>Evolution of Soccer Tactics</li>
+            <li>International Films</li>
+            <li>Baking</li>
+            <li>Classical Piano</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="projects">
+        <h3>Projects</h3>
+        <div class="project-list">
+          <article class="card project">
+            <h4>Law School / Undergraduate Essay Editing Service</h4>
+            <p class="project-meta">Jun 2025 – Present</p>
+            <p>Email <a class="link" href="mailto:jsamuel@jd28.law.harvard.edu?subject=Essay%20editing%20inquiry">jsamuel@jd28.law.harvard.edu</a> for inquiries</p>
+          </article>
+          <article class="card project">
+            <h4>Personal Writing Improvement App</h4>
+            <p>An app that uses AI trained on writing advice from the best writers from all over the world to help you improve your writing in just two minutes a day.</p>
+          </article>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- CONTACT -->
   <section id="contact">
-    <div class="sec-head"><h2 class="serif">Get in touch</h2></div>
-    <p class="contact-lead">I'm always glad to talk about criminal defense, appellate work, AI policy, or writing.</p>
-    <div class="hero-links">
-      <a href="mailto:jsamuel@jd28.law.harvard.edu" class="primary">Email me</a>
-      <a href="https://www.linkedin.com/in/joshua-samuel2002/" class="ghost" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="docs/resume.pdf" class="ghost" target="_blank" rel="noopener">Resume</a>
+    <div class="wrap">
+      <div class="contact-grid">
+        <div class="contact-text">
+          <h2>Get in touch</h2>
+          <p class="lead">I'm always glad to talk about criminal defense, appellate work, AI policy, or writing.</p>
+          <div class="actions">
+            <a class="btn btn--primary" href="mailto:jsamuel@jd28.law.harvard.edu"><span>Email me</span><svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--ghost" href="https://www.linkedin.com/in/joshua-samuel2002/" target="_blank" rel="noopener"><span>LinkedIn</span><svg class="arrow" aria-hidden="true"><use href="#i-out"/></svg></a>
+            <a class="btn btn--ghost" href="docs/resume.pdf" target="_blank" rel="noopener"><span>Resume</span><span class="pill-slot"></span><svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+        </div>
+        <figure class="contact-photo">
+          <img src="images/tedx-2.jpg" alt="Josh hosting on the TEDxBrownU stage, speaking into a microphone" width="1200" height="800" loading="lazy" decoding="async">
+        </figure>
+      </div>
     </div>
   </section>
 
 </main>
 
-<footer>
-  <div class="finner">
-    <span>Joshua Samuel &copy; 2026</span>
-    <span><a href="mailto:jsamuel@jd28.law.harvard.edu">jsamuel@jd28.law.harvard.edu</a> &nbsp;&middot;&nbsp; <a href="tel:+12064304477">(206) 430-4477</a></span>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-row">
+      <a class="foot-brand" href="#top">Joshua Samuel</a>
+      <nav aria-label="Footer">
+        <ul class="foot-links">
+          <li><a href="#education">Education</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#more">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="foot-row foot-row--meta">
+      <p>Joshua Samuel © 2026</p>
+      <p class="foot-contact"><a href="mailto:jsamuel@jd28.law.harvard.edu">jsamuel@jd28.law.harvard.edu</a><a href="tel:+12064304477">(206) 430-4477</a></p>
+    </div>
   </div>
 </footer>
 
-<!-- MODALS -->
+<!-- MODAL -->
 <div class="overlay" id="blame-modal" role="dialog" aria-modal="true" aria-labelledby="blame-title">
   <div class="modal">
     <div class="modal-head">
@@ -227,20 +307,25 @@
       <button type="button" class="mclose" aria-label="Close">&times;</button>
     </div>
     <div class="modal-body">
-      <p style="font-style:italic;color:var(--muted);margin-bottom:8px">Brown University Capstone Project</p>
+      <p class="modal-eyebrow">Brown University Capstone Project</p>
       <p>For this capstone, I designed and administered a survey to more than 300 members of the Providence community to study how people, acting as prospective jurors, assign moral blame to repeat offenders. Drawing on behavioral psychology, cognitive-bias research, and criminal law, the study examined how a defendant's prior record shapes perceptions of fault, culpability, and the likelihood of re-offense, and how recidivism prejudice may distort factual assessments in criminal defense.</p>
-      <p style="font-style:italic;color:var(--muted);margin-top:12px;font-size:var(--fs-sm)">Full paper available upon request.</p>
+      <p class="modal-note">Full paper available upon request.</p>
     </div>
   </div>
 </div>
 
 <!-- LIGHTBOX FOR PHOTOS -->
 <div class="overlay lightbox-overlay" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
-  <div class="modal lightbox-modal">
+  <figure class="lightbox-fig">
     <img class="lightbox-img" id="lightbox-img" alt="Photo">
-    <div class="lightbox-caption"></div>
-    <button type="button" class="lightbox-close mclose" aria-label="Close">&times;</button>
+    <figcaption class="lightbox-caption"></figcaption>
+  </figure>
+  <div class="lightbox-bar">
+    <button type="button" class="lightbox-step" data-action="prev" aria-label="Previous photo">&lsaquo;</button>
+    <div class="lightbox-counter" aria-live="polite" aria-atomic="true">1 / 1</div>
+    <button type="button" class="lightbox-step" data-action="next" aria-label="Next photo">&rsaquo;</button>
   </div>
+  <button type="button" class="lightbox-close mclose" aria-label="Close">&times;</button>
 </div>
 
 <button type="button" class="to-top" aria-label="Back to top"><span aria-hidden="true">&uarr;</span></button>
