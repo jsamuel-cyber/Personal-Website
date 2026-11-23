@@ -46,7 +46,7 @@ To enable GitHub Pages:
 ### Editing the Education / Skills text
 
 In `index.html`, find the section by its id and edit the text in place:
-- `id="education"`: schools, degrees, activities (each activity is one `<li>`; numbers are added automatically) and notable work cards
+- `id="education"`: schools, degrees, activities (each activity is one `<li>`) and notable work cards
 - `id="more"`: the skills and interests lists (one `<li>` per chip) and the projects
 
 ### Adding photos
