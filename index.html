@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" data-type="service" data-radius="soft" data-buttons="arrow">
+<html lang="en" class="no-js" data-type="service" data-radius="soft" data-buttons="arrow">
 <head>
 <meta charset="UTF-8">
+<script>document.documentElement.classList.remove('no-js')</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
 <meta name="page-type" content="service">
@@ -71,7 +72,7 @@
     <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu">Menu</button>
     <div class="menu" id="menu">
       <nav aria-label="Primary">
-        <ul class="nav-links">
+        <ul class="nav-links" role="list">
           <li><a href="#education">Education</a></li>
           <li><a href="#experience">Experience</a></li>
           <li><a href="#more">Projects</a></li>
@@ -90,7 +91,7 @@
 <main id="main" tabindex="-1">
 
   <!-- HERO -->
-  <section id="top" class="hero">
+  <section id="top" class="hero" tabindex="-1">
     <div class="wrap hero-wrap">
       <div class="hero-grid">
         <div class="hero-text">
@@ -106,7 +107,7 @@
           <img src="images/photo.jpg" alt="Joshua Samuel in a graduation gown and stole, standing in front of a dark green door" width="600" height="852" fetchpriority="high" decoding="async">
         </figure>
       </div>
-      <ul class="route" aria-label="Places">
+      <ul class="route" role="list" aria-label="Places">
         <li style="--i:0"><span class="dot" aria-hidden="true"></span><span class="city">Seattle, WA</span></li>
         <li style="--i:1"><span class="dot" aria-hidden="true"></span><span class="city">Kuala Lumpur, Malaysia</span></li>
         <li style="--i:2"><span class="dot" aria-hidden="true"></span><span class="city">Providence, RI</span></li>
@@ -117,7 +118,7 @@
   </section>
 
   <!-- EDUCATION -->
-  <section id="education">
+  <section id="education" tabindex="-1">
     <div class="wrap">
       <h2>Education</h2>
 
@@ -127,7 +128,7 @@
           <p class="degree">J.D. Candidate, 2028</p>
           <p class="dates">Sep 2025 – Present</p>
           <p class="label">Activities</p>
-          <ol class="activities">
+          <ol class="activities" role="list">
             <li>AISST AI Policy Fellow</li>
             <li>Consumer Protection Clinic</li>
             <li>Ames Moot Court Round of 16</li>
@@ -167,7 +168,7 @@
           <p class="degree">B.A. in International and Public Affairs &amp; Behavioral Decision Sciences</p>
           <p class="dates">Sep 2021 – May 2025</p>
           <p class="label">Activities</p>
-          <ol class="activities">
+          <ol class="activities" role="list">
             <li>CLAS 1770 Ancient Law Teaching Assistant</li>
             <li>TEDxBrownU President</li>
             <li>Pre-Law Society President</li>
@@ -200,24 +201,24 @@
   </section>
 
   <!-- EXPERIENCE -->
-  <section id="experience">
+  <section id="experience" tabindex="-1">
     <div class="wrap">
       <h2>Experience</h2>
       <div class="exp-toolbar">
         <button type="button" class="exp-toggle-all text-btn" aria-controls="exp-list"><span class="exp-toggle-label">Expand all</span></button>
       </div>
-      <div id="exp-list"></div>
+      <div id="exp-list"><noscript><p class="noscript-note">This section needs JavaScript. My experience is also in my <a class="link" href="docs/resume.pdf">resume (PDF)</a>.</p></noscript></div>
     </div>
   </section>
 
   <!-- SKILLS, INTERESTS, PROJECTS -->
-  <section id="more">
+  <section id="more" tabindex="-1">
     <div class="wrap">
       <h2>Skills, Interests, and Projects</h2>
       <div class="more-row">
         <div>
           <h3>Skills</h3>
-          <ul class="chips">
+          <ul class="chips" role="list">
             <li>Spanish</li>
             <li>Public Speaking</li>
             <li>Cross-Cultural Communication</li>
@@ -228,7 +229,7 @@
         </div>
         <div>
           <h3>Interests</h3>
-          <ul class="chips">
+          <ul class="chips" role="list">
             <li>Vipassana Meditation</li>
             <li>Dog Training</li>
             <li>Juror Psychology</li>
@@ -239,6 +240,8 @@
           </ul>
         </div>
       </div>
+
+      <div class="skills-photos" id="skills-photos"></div>
 
       <div class="projects">
         <h3>Projects</h3>
@@ -258,7 +261,7 @@
   </section>
 
   <!-- CONTACT -->
-  <section id="contact">
+  <section id="contact" tabindex="-1">
     <div class="wrap">
       <div class="contact-grid">
         <div class="contact-text">
@@ -284,7 +287,7 @@
     <div class="foot-row">
       <a class="foot-brand" href="#top">Joshua Samuel</a>
       <nav aria-label="Footer">
-        <ul class="foot-links">
+        <ul class="foot-links" role="list">
           <li><a href="#education">Education</a></li>
           <li><a href="#experience">Experience</a></li>
           <li><a href="#more">Projects</a></li>
@@ -317,7 +320,7 @@
 <!-- LIGHTBOX FOR PHOTOS -->
 <div class="overlay lightbox-overlay" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
   <figure class="lightbox-fig">
-    <img class="lightbox-img" id="lightbox-img" alt="Photo">
+    <img class="lightbox-img" alt="Photo">
     <figcaption class="lightbox-caption"></figcaption>
   </figure>
   <div class="lightbox-bar">

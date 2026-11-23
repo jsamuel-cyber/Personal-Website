@@ -1,8 +1,9 @@
 /* Site behaviour. Vanilla JS, no dependencies. Data lives in content.js. */
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const desktopQuery = window.matchMedia('(min-width: 1024px)');
-const phoneQuery = window.matchMedia('(max-width: 767px)');
+const desktopQuery = window.matchMedia('(width >= 1024px)');
+const phoneQuery = window.matchMedia('(width < 768px)');
+const tabletQuery = window.matchMedia('(768px <= width < 1024px)');
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
@@ -19,15 +20,20 @@ let currentGalleryContext = null;
 // read once through a plain Image (cached afterwards) to get its shape before the panel is opened.
 const ratioProbes = [];
 const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
-let relayoutQueued = false;
+let measureQueued = false;
+// One measurement per frame, however many photos load or resize events arrive
+function queueMeasure() {
+  if (measureQueued) return;
+  measureQueued = true;
+  requestAnimationFrame(() => { measureQueued = false; measurePanels(); });
+}
 function frameRatio(frame, w, h) {
   if (!w || !h) return;
   frame.style.setProperty('--ar', clamp(w / h, 0.8, 2.2).toFixed(3));
   frame.style.setProperty('--ar-m', clamp(w / h, 1, 2.2).toFixed(3));
-  if (!relayoutQueued) {
-    relayoutQueued = true;
-    requestAnimationFrame(() => { relayoutQueued = false; if (typeof measurePanels === 'function' && expList.children.length) measurePanels(); });
-  }
+  const gallery = frame.parentElement;
+  gallery.style.setProperty('--sum', Array.from(gallery.children).reduce((n, f) => n + (parseFloat(f.style.getPropertyValue('--ar')) || 1.5), 0).toFixed(3));
+  queueMeasure();
 }
 
 // Thumbnails are keyboard-accessible buttons; captions only show inside the lightbox
@@ -118,8 +124,8 @@ lightboxEl.addEventListener('touchend', e => {
 /* ===== Experience ===== */
 const expList = document.getElementById('exp-list');
 
+// Returns the button and its live region, to be appended side by side
 function buildCopyLink(id, title) {
-  const wrap = el('div', 'exp-copy-row');
   const btn = el('button', 'exp-copy');
   btn.type = 'button';
   btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg><span class="exp-copy-label">Copy link</span>';
@@ -139,7 +145,7 @@ function buildCopyLink(id, title) {
         ok = true;
       }
     } catch (e) { /* fall through to the fallback */ }
-    if (!ok) ok = copyTextFallback(url, wrap);
+    if (!ok) ok = copyTextFallback(url, btn.parentElement);
     const msg = ok ? 'Link copied' : 'Couldn’t copy — use the address bar';
     label.textContent = msg;
     live.textContent = msg;
@@ -147,8 +153,7 @@ function buildCopyLink(id, title) {
     timer = setTimeout(() => { label.textContent = 'Copy link'; live.textContent = ''; }, 2000);
   });
 
-  wrap.append(btn, live);
-  return wrap;
+  return [btn, live];
 }
 
 // Fallback when the async clipboard API is unavailable
@@ -198,25 +203,24 @@ function renderExperiences() {
     const inner = el('div', 'exp-panel-inner');
 
     // Desktop: photos, plus a type plate with the location when there is room (or no photo at all).
-    // The plate repeats the location, so it is hidden from screen readers and from the phone layout.
+    // The plate is the location: where it is not shown, the plain location line below stands in for it.
     const visual = el('div', 'exp-visual');
     visual.setAttribute('data-count', (exp.photos || []).length);
     if (exp.photos && exp.photos.length > 0) visual.appendChild(buildGallery(exp.photos, `gallery-${exp.id}`));
     if (!exp.photos || exp.photos.length < 2) {
-      const plate = el('div', 'exp-plate', exp.loc);
-      plate.setAttribute('aria-hidden', 'true');
+      const plate = el('div', 'exp-plate');
+      plate.appendChild(el('span', 'exp-loc', exp.loc));
       visual.appendChild(plate);
     }
     inner.appendChild(visual);
 
-    const meta = el('p', 'exp-meta');
-    [exp.role, exp.loc, exp.dates].forEach(part => meta.appendChild(el('span', null, part)));
-    inner.appendChild(meta);
+    inner.appendChild(el('p', 'exp-meta', exp.loc));
 
     const ul = el('ul', 'exp-bullets');
+    ul.setAttribute('role', 'list');
     exp.bullets.forEach(b => ul.appendChild(el('li', null, b)));
     inner.appendChild(ul);
-    inner.appendChild(buildCopyLink(exp.id, exp.title));
+    inner.append(...buildCopyLink(exp.id, exp.title));
 
     panel.appendChild(inner);
     body.appendChild(panel);
@@ -239,6 +243,8 @@ function setExpOpen(id, open, opts) {
   body.inert = !open;
   expBar(id).setAttribute('aria-expanded', String(open));
   if (open && opts && opts.hash) history.replaceState(null, '', `#role-${id}`);
+  // a closed role must not stay in the URL, or a later layout change would reopen it
+  if (!open && !(opts && opts.keepHash) && location.hash === `#role-${id}`) history.replaceState(null, '', location.pathname + location.search);
 }
 
 // Master-detail: exactly one role open. Accordion: toggle just this one.
@@ -288,13 +294,30 @@ function ensureExpHeaderVisible(id) {
 
 // Master-detail: every panel is as tall as the tallest one (or the list, if that is taller), and the
 // photo row of each panel takes up the difference (190-300px), so no panel ends in a dead band.
+// A single photo keeps its plate only if 200px remain beside it and the location fits on one line;
+// the plate decides whether the location line below is shown, which changes the height, so repeat.
 const VISUAL_MIN = 190, VISUAL_MAX = 300;
+// Tablet accordion: one-photo roles get a 280px row, with the plate dropped under the same rules
+const TABLET_VISUAL = 280;
+function layoutTabletVisuals() {
+  experiences.forEach(e => {
+    const visual = expBody(e.id).querySelector('.exp-visual');
+    if (visual.getAttribute('data-count') !== '1') return;
+    visual.style.setProperty('--vh', `${TABLET_VISUAL}px`);
+    visual.classList.remove('no-plate');
+    const ar = parseFloat(visual.querySelector('.photo-btn').style.getPropertyValue('--ar')) || 1.5;
+    const plate = visual.querySelector('.exp-plate');
+    visual.classList.toggle('no-plate', visual.clientWidth - 12 - TABLET_VISUAL * ar < 200 || plate.scrollWidth > plate.clientWidth + 1);
+  });
+}
+
 function measurePanels() {
+  expList.style.removeProperty('--panel-min');
+  if (!experiences.length) return;
   if (!desktopQuery.matches) {
-    expList.style.removeProperty('--panel-min');
+    if (tabletQuery.matches) layoutTabletVisuals();
     return;
   }
-  expList.style.removeProperty('--panel-min');
   const bars = Array.from(expList.querySelectorAll('.exp-bar'));
   const listH = bars[bars.length - 1].getBoundingClientRect().bottom - bars[0].getBoundingClientRect().top + 1;
   const items = experiences.map(e => {
@@ -305,19 +328,32 @@ function measurePanels() {
     const keep = { display: body.style.display, self: body.style.alignSelf };
     body.style.display = 'block';
     body.style.alignSelf = 'start';
-    return { body, visual, keep, natural: body.offsetHeight };
+    return { body, visual, keep, vh: VISUAL_MIN, single: visual.getAttribute('data-count') === '1' };
   });
-  const target = Math.max(listH, ...items.map(i => i.natural));
+  let target = listH;
+  for (let pass = 0; pass < 3; pass++) {
+    let changed = false;
+    items.forEach(i => {
+      if (!i.single) return;
+      const ar = parseFloat(i.visual.querySelector('.photo-btn').style.getPropertyValue('--ar')) || 1.5;
+      i.visual.classList.remove('no-plate');
+      i.visual.style.setProperty('--vh', `${i.vh}px`);
+      const plate = i.visual.querySelector('.exp-plate');
+      const none = i.visual.clientWidth - 12 - i.vh * ar < 200 || plate.scrollWidth > plate.clientWidth + 1;
+      if (none !== i.visual.classList.contains('no-plate')) changed = true;
+      i.visual.classList.toggle('no-plate', none);
+    });
+    items.forEach(i => { i.visual.style.setProperty('--vh', `${VISUAL_MIN}px`); i.natural = i.body.offsetHeight; });
+    target = Math.max(listH, ...items.map(i => i.natural));
+    items.forEach(i => {
+      const vh = clamp(VISUAL_MIN + (target - i.natural), VISUAL_MIN, VISUAL_MAX);
+      if (vh !== i.vh) changed = true;
+      i.vh = vh;
+      i.visual.style.setProperty('--vh', `${vh}px`);
+    });
+    if (!changed) break;
+  }
   items.forEach(i => {
-    const vh = clamp(VISUAL_MIN + (target - i.natural), VISUAL_MIN, VISUAL_MAX);
-    i.visual.style.setProperty('--vh', `${vh}px`);
-    // one photo: keep the plate only if at least 200px remain beside the frame
-    const gallery = i.visual.querySelector('.photo-gallery');
-    if (gallery && i.visual.getAttribute('data-count') === '1') {
-      const ar = parseFloat(gallery.firstElementChild.style.getPropertyValue('--ar')) || 1.5;
-      const spare = i.visual.clientWidth - 12 - vh * ar;
-      i.visual.classList.toggle('no-plate', spare < 200);
-    }
     i.body.style.display = i.keep.display;
     i.body.style.alignSelf = i.keep.self;
   });
@@ -347,17 +383,21 @@ function openExpFromHash(smooth) {
 }
 
 // Keep the state valid when the layout crosses 1024px: desktop shows exactly one role
-function normaliseExp() {
+function normaliseExp(opts) {
   if (desktopQuery.matches) {
     const open = openIds();
-    const keep = expIdFromHash() || open[0] || experiences[0].id;
-    experiences.forEach(e => setExpOpen(e.id, e.id === keep));
+    const keep = open[0] || expIdFromHash() || experiences[0].id;
+    experiences.forEach(e => setExpOpen(e.id, e.id === keep, opts));
   }
   measurePanels();
   syncToggleAll();
 }
 
 function initExperience() {
+  if (!experiences.length) {
+    document.querySelector('.exp-toolbar').hidden = true; // nothing to expand: the section shows its heading only
+    return;
+  }
   renderExperiences();
 
   document.querySelector('.exp-toggle-all').addEventListener('click', () => {
@@ -366,10 +406,11 @@ function initExperience() {
     syncToggleAll();
   });
 
-  normaliseExp();
-  desktopQuery.addEventListener('change', normaliseExp);
-  window.addEventListener('resize', measurePanels);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measurePanels);
+  normaliseExp({ keepHash: true }); // a deep link in the URL is applied just below
+  desktopQuery.addEventListener('change', () => normaliseExp());
+  phoneQuery.addEventListener('change', queueMeasure);
+  window.addEventListener('resize', queueMeasure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(queueMeasure);
 
   // Deep link on load. Lazy photos and webfonts can still shift the layout above the target,
   // so keep the linked role pinned until the layout settles or the reader scrolls.
@@ -484,7 +525,14 @@ function setMenu(open) {
   else menuBtn.focus({ preventScroll: true });
 }
 menuBtn.addEventListener('click', () => setMenu(!menuOpen()));
-menuEl.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+menuEl.addEventListener('click', e => {
+  const link = e.target.closest('a');
+  if (!link || !menuOpen()) return;
+  setMenu(false);
+  // keyboard focus follows the reader to the section they chose
+  const target = link.hash && document.getElementById(link.hash.slice(1));
+  if (target) target.focus({ preventScroll: true });
+});
 phoneQuery.addEventListener('change', () => { if (!phoneQuery.matches && menuOpen()) setMenu(false); });
 
 /* ===== Scroll: nav border, active link, back to top ===== */
@@ -517,7 +565,7 @@ function onScroll() {
   spyLinks.forEach((a, i) => {
     const on = i === active;
     a.classList.toggle('active', on);
-    if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+    if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
   });
 }
 window.addEventListener('scroll', () => {
@@ -550,20 +598,9 @@ function decorateLinks() {
 }
 
 /* ===== Init (scripts are deferred, so the DOM is ready) ===== */
-function renderSkillsPhotos() {
-  if (!skillsPhotos || skillsPhotos.length === 0) return;
-  let box = document.getElementById('skills-photos');
-  if (!box) {
-    box = el('div');
-    box.id = 'skills-photos';
-    document.querySelector('#more .wrap').appendChild(box);
-  }
-  renderGallery('skills-photos', skillsPhotos);
-}
-
 initExperience();
 window.addEventListener('load', () => ratioProbes.forEach(run => run()));
 renderGallery('documentary-photos', documentaryPhotos);
-renderSkillsPhotos();
+renderGallery('skills-photos', skillsPhotos);
 decorateLinks();
 onScroll();
