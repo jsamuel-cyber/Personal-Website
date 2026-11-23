@@ -16,9 +16,12 @@
  *    - photos: array of photo objects (see below)
  *
  * To add photos to an experience:
- * 1. Upload photo files to the images/ folder (suggested names: images/fpd-1.jpg, images/tedx-2.jpg, etc.)
+ * 1. Upload photo files to the images/ folder (suggested names: images/fpd-1.jpg, images/tedx-1.jpg, etc.)
  * 2. Add an object to the photos array with this structure:
- *    { src: 'images/your-photo.jpg', alt: 'Brief description', caption: 'Optional caption' }
+ *    { src: 'images/your-photo.jpg', alt: 'Brief description', caption: 'Optional caption', position: 'center 30%' }
+ *    caption (optional) shows only in the photo viewer.
+ *    position (optional) is a CSS object-position for the cropped thumbnail, default 'center 30%'.
+ *    Use it when the default crop cuts off a face, e.g. 'center 15%' to show more of the top.
  *
  * To add photos to the Skills section gallery:
  * 1. Add objects to the skillsPhotos array with the same structure as above
@@ -41,7 +44,7 @@ const experiences = [
     ],
     photos: [
       {src: 'images/fpd-1.jpg', alt: 'Josh with fellow interns outside the William Kenzo Nakamura U.S. Courthouse in Seattle', caption: 'Outside the Nakamura U.S. Courthouse, Seattle'},
-      {src: 'images/fpd-2.jpg', alt: 'Josh and two fellow interns at the Big Quilcene Trail trailhead', caption: 'Hiking the Big Quilcene Trail with fellow interns'}
+      {src: 'images/fpd-2.jpg', alt: 'Josh and two fellow interns at the Big Quilcene Trail trailhead', caption: 'Hiking the Big Quilcene Trail with fellow interns', position: '10% 30%'}
     ]
   },
   {
@@ -56,8 +59,7 @@ const experiences = [
       'Directed efforts across marketing, finance, technology, and stage design to earn the organization a high Net Promoter Score.'
     ],
     photos: [
-      {src: 'images/tedx-1.jpg', alt: 'The TEDxBrownU organizing team posing on stage beneath the TEDxBrownU screen', caption: 'The TEDxBrownU team'},
-      {src: 'images/tedx-2.jpg', alt: 'Josh hosting on the TEDxBrownU stage, speaking into a microphone', caption: 'Hosting TEDxBrownU'}
+      {src: 'images/tedx-1.jpg', alt: 'The TEDxBrownU organizing team posing on stage beneath the TEDxBrownU screen', caption: 'The TEDxBrownU team'}
     ]
   },
   {
@@ -133,5 +135,5 @@ const experiences = [
 const skillsPhotos = [];
 
 const documentaryPhotos = [
-  {src: 'images/torties-1.jpg', alt: 'Josh with fellow award winners holding trophies at the Harvard Law School Torties', caption: 'Accepting Best Documentary at the Torties'}
+  {src: 'images/torties-1.jpg', alt: 'Josh with fellow award winners holding trophies at the Harvard Law School Torties', caption: 'Accepting Best Documentary at the Torties', position: 'center 68%'}
 ];
